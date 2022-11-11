@@ -1,0 +1,4 @@
+# ignore clab dir
+clab-*
+# ignore clab bak files
+*.bak

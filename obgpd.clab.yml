@@ -1,0 +1,26 @@
+name: obgpd
+
+topology:
+  nodes:
+    ixp:
+      kind: bridge
+    srlinux:
+      kind: nokia_srlinux
+      image: ghcr.io/nokia/srlinux:22.6.4
+      startup-config: srlinux.cfg
+    ceos:
+      kind: arista_ceos
+      image: ceos:4.28.0F
+      startup-config: ceos.cfg
+    openbgpd:
+      kind: linux
+      image: quay.io/openbgpd/openbgpd:7.7
+      binds:
+        - openbgpd.conf:/etc/bgpd/bgpd.conf
+      exec:
+        - "ip address add dev eth1 192.168.0.3/24"
+
+  links:
+    - endpoints: ["srlinux:e1-1", "ixp:srl1"]
+    - endpoints: ["ceos:eth1", "ixp:ceos1"]
+    - endpoints: ["openbgpd:eth1", "ixp:obgp1"]
